@@ -21,7 +21,7 @@ public class Wordle {
         for(int r = 0; r < board.length; r++){
             for(int c = 0; c < board[r].length; c++){
                 board[r][c] = '■';
-                statusBoard[r][c] = '■';
+                statusBoard[r][c] = '✕';
 
             }
         }
@@ -44,7 +44,7 @@ public class Wordle {
         while(row < 6){
             System.out.print("Input guess: ");
             String playerGuess = scan.next();
-            if(isValidWord(playerGuess)){
+            if(isValidWord(playerGuess)) {
 
                 System.out.println();
 
@@ -53,21 +53,30 @@ public class Wordle {
 
                 System.out.println("BOARD");
 
-                for(char[] word : board){
-                    String rowWord = "";
-                    for(char c : word){
+                String rowWord = null;
+                for (char[] word : board) {
+                    rowWord = "";
+                    for (char c : word) {
                         rowWord += c;
                     }
                     System.out.print(rowWord);
-                    System.out.print("\t\t\t" + Arrays.toString(getStatus(rowWord, selectedWord)));
-
+                    statusBoard[row] = getStatus(rowWord, selectedWord); // ?????????
                     System.out.println();
+                }
+                System.out.println(Arrays.toString(statusBoard[row]));
+                System.out.println(Arrays.toString(getStatus(rowWord, selectedWord)));
+                if (checkWin(row)) {
+                    System.out.println("You win!");
+                    break;
+                } else if (row == 6) {
+                    System.out.println("You lose. The word was: " + selectedWord.toUpperCase());
                 }
             }
             else{
                 System.out.println("Invalid word, try again. ");
             }
-            checkWin();
+
+
         }
 
         //System.out.println(selectedWord);
@@ -105,7 +114,25 @@ public class Wordle {
         }
         return result;
     }
-    public static void checkWin(){
+    public static boolean checkWin(int row){
+        row --;
+        for(int c = 0; c < statusBoard[row].length; c++){
+            System.out.println("hi");
+            System.out.println(row);
+            System.out.println((statusBoard[row][0] == '☑'));
+            System.out.println(statusBoard[row][0]);
+            System.out.println(Arrays.toString(statusBoard[row]));
+            if((statusBoard[row][0] == '☑') && statusBoard[row][0] != statusBoard[row][c]){
+                System.out.println("bye");
+                return false;
+            }
+            else if(statusBoard[row][c] != '☑'){
+                return false;
+            }
+
+
+        }
+        return true;
 
     }
 }
