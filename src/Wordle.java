@@ -46,6 +46,7 @@ public class Wordle {
             String playerGuess = scan.next();
             if(isValidWord(playerGuess)) {
 
+
                 System.out.println();
 
                 board[row] = playerGuess.toCharArray();
@@ -54,23 +55,28 @@ public class Wordle {
                 System.out.println("BOARD");
 
                 String rowWord = null;
+                int statusBoardRow = 0;
                 for (char[] word : board) {
                     rowWord = "";
                     for (char c : word) {
                         rowWord += c;
                     }
                     System.out.print(rowWord);
-                    statusBoard[row] = getStatus(rowWord, selectedWord); // ?????????
+                    System.out.println(Arrays.toString(getStatus(rowWord, selectedWord)));
+
+                    statusBoard[statusBoardRow] = getStatus(rowWord,selectedWord);
+
                     System.out.println();
+                    statusBoardRow++;
                 }
-                System.out.println(Arrays.toString(statusBoard[row]));
-                System.out.println(Arrays.toString(getStatus(rowWord, selectedWord)));
                 if (checkWin(row)) {
                     System.out.println("You win!");
                     break;
                 } else if (row == 6) {
                     System.out.println("You lose. The word was: " + selectedWord.toUpperCase());
                 }
+
+
             }
             else{
                 System.out.println("Invalid word, try again. ");
@@ -115,21 +121,18 @@ public class Wordle {
         return result;
     }
     public static boolean checkWin(int row){
-        row --;
-        for(int c = 0; c < statusBoard[row].length; c++){
-            System.out.println("hi");
-            System.out.println(row);
-            System.out.println((statusBoard[row][0] == '☑'));
-            System.out.println(statusBoard[row][0]);
-            System.out.println(Arrays.toString(statusBoard[row]));
-            if((statusBoard[row][0] == '☑') && statusBoard[row][0] != statusBoard[row][c]){
-                System.out.println("bye");
-                return false;
-            }
-            else if(statusBoard[row][c] != '☑'){
-                return false;
-            }
 
+        row--;
+        for(int c = 0; c < statusBoard[row].length; c++){
+
+            if(statusBoard[row][c] != '☑') {
+                System.out.println(1);
+                return false;
+            }
+            if(statusBoard[row][0] != statusBoard[row][c]){
+                System.out.println(2);
+                return false;
+            }
 
         }
         return true;
