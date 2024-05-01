@@ -10,23 +10,28 @@ public class Wordle {
 
 
     static Scanner scan = new Scanner(System.in);
+    // init boards
     static char[][] board = new char[6][5];
     static char[][] statusBoard = new char[6][5];
+
     static int[] letterCounts = new int[5];
 
     static int row = 0;
 
 
     public static void main(String[] args){
+
+        // init board
         for(int r = 0; r < board.length; r++){
             for(int c = 0; c < board[r].length; c++){
                 board[r][c] = '■';
-                statusBoard[r][c] = '✖';
+                statusBoard[r][c] = '■';
 
             }
         }
 
         try{
+            // make lists of all possible words / possible answers
             Scanner fileRead = new Scanner(new File("src/possibleWords.txt"));
             Scanner file2Read = new Scanner(new File("src/possibleAnswers.txt"));
             while(fileRead.hasNext()){
@@ -43,17 +48,15 @@ public class Wordle {
 
         while(row < 6){
             System.out.print("Input guess: ");
-            String playerGuess = scan.next();
+            String playerGuess = scan.next().toLowerCase();
             if(isValidWord(playerGuess)) {
-
-
                 System.out.println();
-
                 board[row] = playerGuess.toCharArray();
                 row++;
 
                 String rowWord = null;
                 int statusBoardRow = 0;
+                // printing board
                 System.out.println("  GUESS     STATS");
                 System.out.println("+-------+-----------+");
                 for (char[] word : board) {
@@ -69,12 +72,13 @@ public class Wordle {
                     }
                     System.out.print("|");
                     System.out.println();
-                    statusBoard[statusBoardRow] = getStatus(rowWord,selectedWord);
+                    statusBoard[statusBoardRow] = getStatus(rowWord,selectedWord); // getStatus returns one "row"
                     statusBoardRow++;
                 }
                 System.out.println("+-------+-----------+");
 
                 if (checkWin(row)) {
+                    System.out.println();
                     System.out.println("You win!");
                     break;
                 } else if (row == 6) {
@@ -105,8 +109,9 @@ public class Wordle {
         for(int i = 0; i < pWord.length; i++) {
             letterApps[(int) (tWord[i]) - 97]++;
         }
+        // checking if the letter is in the word but wrong position ("yellow letter")
         for(int i = 0; i < pWord.length; i++){
-            if((int)pWord[i]-97 < 26){
+            if((int)pWord[i]-97 < 26){ // (int)pWord[i]-97 gives a number between 0-25 if the character is a lowercase letter
                 if(letterApps[(int)(pWord[i])-97] > 0){
                     if(pWord[i] != '■'){
                         if(pWord[i] == tWord[i]){
